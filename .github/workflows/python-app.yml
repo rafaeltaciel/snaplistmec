@@ -1,17 +1,37 @@
-from setuptools import setup
-import py2app
+name: Python application
 
-APP = ['seu_app.py']
-DATA_FILES = ['log.png', 'icone.ico']  # Adicione os arquivos de imagem aqui
-OPTIONS = {
-    'argv_emulation': True,
-    'iconfile': 'icone.ico',  # O ícone do aplicativo (usualmente um arquivo .icns no macOS)
-    'packages': ['flet', 'yt_dlp'],  # Liste suas dependências aqui
-}
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
 
-setup(
-    app=APP,
-    data_files=DATA_FILES,
-    options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
-)
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest
