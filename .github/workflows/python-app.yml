@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-latest  # ✅ rodando em macOS porque py2app é para Mac
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -47,8 +47,7 @@ jobs:
         python setup.py py2app
 
     - name: Upload build artifact
-      uses: uses: actions/upload-artifact@v4
-
+      uses: actions/upload-artifact@v4
       with:
         name: MeuAppMac
         path: dist/*.app
