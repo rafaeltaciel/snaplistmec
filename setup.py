@@ -5,7 +5,7 @@ DATA_FILES = []
 OPTIONS = {
     'argv_emulation': True,
     'packages': [],
-    'iconfile': 'icon.icns',  # Se tiver um ícone, opcional
+    
 }
 
 setup(
