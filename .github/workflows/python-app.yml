@@ -35,3 +35,15 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+            - name: Install build tool (py2app)
+      run: |
+        pip install py2app
+    - name: Build macOS app
+      run: |
+        python setup.py py2app
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: MeuAppMac
+        path: dist/*.app
+
